@@ -6,14 +6,14 @@ interface IRequest {
   email: string;
   password: string;
 }
-interface IRespnse {
+interface IResponse {
   email: string;
   password: string;
 }
 
 @injectable()
 class SingUpUseCase {
-  async execute({ email, password }: IRequest): Promise<IRespnse> {
+  async execute({ email, password }: IRequest): Promise<IResponse> {
     throw new DatabaseConnectionError();
 
     return { email, password };
