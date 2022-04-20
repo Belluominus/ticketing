@@ -11,7 +11,7 @@ class SingUpController {
 
     const singUpData = await singUpUseCase.execute({ email, password });
 
-    return response.json(singUpData);
+    return response.status(201).send(singUpData);
   }
 }
 

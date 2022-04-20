@@ -1,6 +1,7 @@
-import { inject, injectable } from 'tsyringe';
+import { injectable } from 'tsyringe';
 
-import { DatabaseConnectionError } from '../../../shared/errors/DatabaseConnectionError';
+import { User } from '../../../models/user';
+import { BadRequestError } from '../../../shared/errors/BadRequestError';
 
 interface IRequest {
   email: string;
@@ -14,9 +15,17 @@ interface IResponse {
 @injectable()
 class SingUpUseCase {
   async execute({ email, password }: IRequest): Promise<IResponse> {
-    throw new DatabaseConnectionError();
+    const existingUser = await User.findOne({ email });
 
-    return { email, password };
+    if (existingUser) {
+      throw new BadRequestError('Email in use');
+    }
+
+    const user = User.build({ email, password });
+
+    await user.save();
+
+    return user;
   }
 }
 
