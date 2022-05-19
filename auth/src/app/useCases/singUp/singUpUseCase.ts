@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken';
 import { injectable } from 'tsyringe';
 
 import { User } from '../../../models/user';
@@ -8,8 +9,12 @@ interface IRequest {
   password: string;
 }
 interface IResponse {
-  email: string;
-  password: string;
+  user: {
+    id: string;
+    email: string;
+    password: string;
+  };
+  userToken: string;
 }
 
 @injectable()
@@ -25,7 +30,24 @@ class SingUpUseCase {
 
     await user.save();
 
-    return user;
+    const userToken = jwt.sign(
+      {
+        id: user.id,
+        email: user.email,
+      },
+      'asdf',
+    );
+
+    const userResponse = {
+      user: {
+        id: user.id,
+        email: user.email,
+        password: user.password,
+      },
+      userToken,
+    };
+
+    return userResponse;
   }
 }
 

@@ -11,7 +11,13 @@ class SingUpController {
 
     const singUpData = await singUpUseCase.execute({ email, password });
 
-    return response.status(201).send(singUpData);
+    request.session = {
+      jwt: singUpData.userToken,
+    };
+
+    console.log(singUpData);
+
+    return response.status(201).send(singUpData.user);
   }
 }
 

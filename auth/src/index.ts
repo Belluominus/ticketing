@@ -10,7 +10,7 @@ import { errorHandler } from './shared/middlewares/errorHandler';
 import { routes } from './shared/routes';
 
 const app = express();
-app.settings('trust proxy', true);
+app.set('trust proxy', true);
 app.use(json());
 app.use(
   cookieSession({
