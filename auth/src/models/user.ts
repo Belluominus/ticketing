@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+import { hashProvider } from '../shared/providers/hashProvider';
+
 interface IUserAttrs {
   email: string;
   password: string;
@@ -22,6 +24,15 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
 });
+
+userSchema.pre('save', async function (done) {
+  if (this.isModified('password')) {
+    const passwordHash = await hashProvider.encryptData(this.get('password'));
+    this.set('password', passwordHash);
+  }
+  done();
+});
+
 userSchema.statics.build = (attrs: IUserAttrs) => {
   return new User(attrs);
 };

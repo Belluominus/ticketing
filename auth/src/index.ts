@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import 'express-async-errors';
 import { json } from 'body-parser';
+import cookieSession from 'cookie-session';
 import express from 'express';
 import mongoose from 'mongoose';
 
@@ -9,7 +10,14 @@ import { errorHandler } from './shared/middlewares/errorHandler';
 import { routes } from './shared/routes';
 
 const app = express();
+app.settings('trust proxy', true);
 app.use(json());
+app.use(
+  cookieSession({
+    signed: false,
+    secure: true,
+  }),
+);
 
 app.use(routes);
 
